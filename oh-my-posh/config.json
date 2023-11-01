@@ -1,0 +1,193 @@
+{
+    "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+    "final_space": true,
+    "version": 2,
+    "blocks": [
+        {
+            "type": "prompt",
+            "alignment": "left",
+            "newline": false,
+            "segments": [
+                {
+                    "type": "text",
+                    "style": "diamond",
+                    "leading_diamond": "\ue0ba",
+                    "trailing_diamond": "\ue0b8",
+                    "foreground": "#000000",
+                    "background_templates": [
+                        "{{if .Root}}#FF0000{{else}}#ff741d{{end}}"
+                    ],
+                    "template": " {{if .Root}}\uf21b{{else}}\uf303{{end}}  "
+                },
+                {
+                    "type": "session",
+                    "style": "diamond",
+                    "leading_diamond": "",
+                    "trailing_diamond": "\ue0b0",
+                    "foreground": "#000000",
+                    "background": "#fa9758",
+                    "template": " {{.UserName}} "
+
+                },
+                {
+                    "type": "path",
+                    "style": "diamond",
+                    "leading_diamond": "",
+                    "trailing_diamond": "\ue0b0",
+                    "foreground": "#ffffff",
+                    "background": "#46617b",
+                    "template": " {{.Path}} ",
+                    "properties": {
+                        "style": "mixed"
+                    }
+                },
+                {
+                    "type": "git",
+                    "style": "powerline",
+                    "powerline_symbol": "\ue0b0",
+                    "foreground_templates": [
+                        "#ffffff"
+                    ],
+                    "background_templates": [
+                        "{{if .Root}}#606060{{else}}#46617b{{end}}"
+                    ],
+                    "template": " {{.HEAD}} ",
+                    "properties": {
+                        "fetch_upstream_icon": true
+                    }
+                },
+                {
+                    "type": "git",
+                    "style": "powerline",
+                    "powerline_symbol": "\ue0b0",
+                    "foreground": "#ffffff",
+                    "background_templates": [
+                        "{{if .Detached}}#cb667b{{else if .Merge}}#4f4a4d{{else if .Rebase}}#1e1f4b{{else if .CherryPick}}#673e2e{{else if .Revert}}#ffb39e{{else}}#37334b{{end}}"
+                    ],
+                    "template": "{{if gt .Ahead .Behind}} \ueab7{{else if lt .Ahead .Behind}} \ueab4{{else}} \uf068{{end}}{{if or (gt .Ahead 0) (gt .Behind 0)}} \ueaa1{{.Ahead}} \uea9a{{.Behind}}{{end}} ",
+                    "properties": {
+                        "fetch_status": true,
+                        "fetch_stash_count": true
+                    }
+                },
+                {
+                    "type": "git",
+                    "style": "diamond",
+                    "leading_diamond": "",
+                    "trailing_diamond": "\ue0b4",
+                    "foreground": "#ffffff",
+                    "background_templates": [
+                        "#fefefe"
+                    ],
+                    "template": "{{if gt .Working.Deleted 0}} -{{.Working.Deleted}}{{end}}{{if gt .Working.Added 0}} +{{.Working.Added}}{{end}}{{if gt .Working.Modified 0}} ~{{.Working.Modified}}{{end}}",
+                    "properties": {
+                        "fetch_status": true,
+                        "fetch_stash_count": true
+                    }
+                }
+            ]
+        },
+        {
+            "type": "prompt",
+            "alignment": "right",
+            "newline": false,
+            "segments": [
+                {
+                    "type": "owm",
+                    "style": "diamond",
+                    "leading_diamond": "\ue0b6",
+                    "trailing_diamond": "",
+                    "foreground": "#a1a1a1",
+                    "background": "#2f2c33",
+                    "template": " {{.Weather}} {{.Temperature}}{{.UnitIcon}} |",
+                    "properties": {
+                        "latitude": 51.2,
+                        "longtitude": 6.6833,
+                        "apikey": "df8fa265e5b75bbb80233eca80c1a3b4",
+                        "units": "metric",
+                        "http_timeout": 200,
+                        "cache_timeout": 10
+                    }
+                },
+                {
+                    "type": "connection",
+                    "style": "diamond",
+                    "leading_diamond": "",
+                    "trailing_diamond": "\ue0b8",
+                    "foreground": "#a1a1a1",
+                    "background": "#2f2c33",
+                    "template": " {{ if eq .Type \"wifi\"}}{{.SSID}}{{else}}Ethernet{{end}} ",
+                    "properties": {
+                        "unit": "Mbps"
+                    }
+                }
+            ]
+        },
+        {
+            "alignment": "left",
+            "type": "prompt",
+            "newline": true,
+            "segments": [
+                {
+                    "background": "#000000",
+                    "foreground": "#ff741d",
+                    "style": "plain",
+                    "type": "text",
+                    "template": "<b></b>"
+                },
+                {
+                    "foreground": "#000000",
+                    "background_templates": [
+                        "{{if .Root}}#FF0000{{else}}#ff741d{{end}}"
+                    ],
+                    "style": "diamond",
+                    "leading_diamond": "\ue0be",
+                    "trailing_diamond": "\ue0bc",
+                    "type": "text",
+                    "template": " \uea9c  "
+                }
+            ]
+        },
+        {
+            "type": "rprompt",
+            "alignment": "right",
+            "newline": false,
+            "segments": [
+                {
+                    "type": "executiontime",
+                    "style": "diamond",
+                    "leading_diamond": "\ue0be",
+                    "trailing_diamond": "",
+                    "foreground": "#ffffff",
+                    "background": "#2f2c33",
+                    "template": "  {{.FormattedMs}} ",
+                    "properties": {
+                        "style": "austin",
+                        "threshold": 1000,
+                        "always_enabled": true
+                    }
+                },
+                {
+                    "type": "status",
+                    "style": "diamond",
+                    "leading_diamond": "",
+                    "trailing_diamond": "\ue0bc",
+                    "foreground_templates": [
+                        "{{if eq .Code 0}}#008100{{else}}#a1a1a1{{end}}"],
+                    "background_templates": [
+                        "{{if ne .Code 0}}#4c202e{{else}}#2f2c33{{end}}"
+                    ],
+                    "template": " {{if eq .Code 0}}\uf42e{{else}}\uea76 {{reason .Code}}{{end}}  ",
+                    "properties": {
+                        "always_enabled": true
+                    }
+                }
+            ]
+        }
+    ],
+    "secondary_prompt": {
+        "foreground": "#ffffff",
+        "background": "transparent",
+        "template": "-> "
+    }
+}
