@@ -1,0 +1,201 @@
+#!/usr/bin/lua
+
+-- set some option within riverwm
+function riverSet(option, value)
+	os.execute("riverctl " .. option .. " " .. value)
+end
+
+
+-- different mapping functions
+mappings = {
+	["map"] = function(mode, opts, mod, keys, action)
+		riverSet("map", opts .. " " .. mode .. " " .. mod .. " " .. keys .. " " .. action)
+	end,
+	["map-pointer"] = function(mode, opts, mod, keys, action)
+		button = "BTN_" .. string.upper(keys)
+		riverSet("map-pointer", mode .. " " .. mod .. " " .. button .. " " .. action)
+	end,
+	["map-switch"] = function(mode, opts, kind, state, command)
+		riverSet("map-switch", mode .. " " .. kind .. " " .. state .. " " .. command)
+	end,
+}
+
+-- use a table to denote different keybinds in different modes
+-- which get applied using a function
+-- inspired by which-key.nvim
+function setupBinds(binds)	
+	for mode_i in pairs(binds) do
+		mode = binds[mode_i]
+		kind = mode["kind"]
+
+		for mod_i in pairs(mode["mod"]) do
+			mod = mode["mod"][mod_i]
+			for mapping_i in pairs(mod) do
+				mapping = mod[mapping_i]
+				mappings[mapping["map"]](mode["kind"], mapping["opts"] or "", mod_i, mapping["button"], mapping["action"])
+			end
+		end
+	end
+end
+
+binds = {
+	mode = {
+		kind = "normal",
+		mod = {
+			["Super+Shift"] = {
+				{
+					map = "map",
+					button = "e",
+					action = "exit",
+				},
+			},
+			["Super"] = {
+				{
+					map = "map",
+					button = "Return",
+					action = "spawn kitty",
+				},
+				{
+					map = "map-pointer",
+					button = "right",
+					action = "move-view",
+				},
+				{
+					map = "map-pointer",
+					button = "left",
+					action = "resize-view",
+				},
+				{
+					map = "map-pointer",
+					button = "middle",
+					action = "toggle-float"
+				}
+			},
+			["Alt"] = {
+				{
+					map = "map",
+					button = "q",
+					action = "close",
+				},
+				{
+					map = "map",
+					button = "v",
+					action = "focus-view next",
+				},
+			},
+			["Alt+Shift"] = {
+				{
+					map = "map",
+					button = "v",
+					action = "focus-view previous",
+				},
+			},
+			["Control"] = {
+				{
+					map = "map",
+					button = "h",
+					opts = "-repeat",
+					action = "resize horizontal 10",
+				},
+				{
+					map = "map",
+					opts = "-repeat",
+					button = "l",
+					action = "resize horizontal -10",
+				},
+				{
+					map = "map",
+					opts = "-repeat",
+					button = "j",
+					action = "resize vertical 5",
+				},
+				{
+					map = "map",
+					opts = "-repeat",
+					button = "k",
+					action = "resize vertical -5"
+				}
+			},
+			["Control+Shift"] = {
+				{
+					map = "map",
+					opts = "-repeat",
+					button = "h",
+					action = "move left 10",
+				},
+				{
+					map = "map",
+					opts = "-repeat",
+					button = "l",
+					action = "move right 10",
+				},
+				{
+					map = "map",
+					opts = "-repeat",
+					button = "j",
+					action = "move down 5",
+				},
+				{
+					map = "map",
+					opts = "-repeat",
+					button = "k",
+					action = "move up 5",
+				},
+			}
+		},
+	},
+}
+
+setupBinds(binds)
+
+
+-- same as for setupBinds(), just for general settings
+function setupGeneral(settings, prefix)
+	for setting in pairs(settings) do
+		if(type(settings[setting]) == "table") then
+			setting_prefix = setting
+			if prefix then
+				setting_prefix = prefix .. "-" .. setting
+			end
+			setupGeneral(settings[setting], setting_prefix)
+		elseif (type(settings[setting]) == "string") then
+			prefixed = setting
+			if prefix then
+				prefixed = prefix .. "-" .. setting
+			end
+			riverSet(prefixed, settings[setting])
+		end
+	end
+end
+
+
+generic_settings = {
+	["attach-mode"] = "top",
+	["background-color"] = "0x696969",
+	["border"] = {
+		["color"] = {
+			["focused"] = "0xFFFFFF",
+			["unfocused"] = "0xCCCCCC80",
+			["urgent"] = "0xFF101050",
+		},
+		["width"] = "2",
+	},
+	["focus-follows-cursor"] = "disabled",
+	["hide-cursor timeout"] = "15000",
+	["hide-cursor when-typing"] = "enabled",
+	["set"] = {
+		["cursor-warp"] = "on-focus-change",
+		["repeat"] = "40 125",
+	},
+}
+
+setupGeneral(generic_settings)
+
+-- setup the tag functionality of river
+for i = 0, 9 do
+	tag = (1 << (i - 1))
+	mappings["map"]("normal", "", "Super", i, "set-focused-tags " .. tag)
+	mappings["map"]("normal", "", "Super+Alt", i, "set-view-tags " .. tag)
+	mappings["map"]("normal", "", "Super+Shift", i, "toggle-focused-tags " .. tag)
+	mappings["map"]("normal", "", "Super+Control", i, "toggle-view-tags " .. tag)
+end
