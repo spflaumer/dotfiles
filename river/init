@@ -5,6 +5,10 @@ function riverSet(option, value)
 	os.execute("riverctl " .. option .. " " .. value)
 end
 
+riverSet("spawn", "rivertile")
+riverSet("default-layout", "rivertile")
+
+riverSet("spawn", "swayidle")
 
 -- different mapping functions
 mappings = {
@@ -48,75 +52,11 @@ binds = {
 					button = "e",
 					action = "exit",
 				},
-			},
-			["Super"] = {
 				{
 					map = "map",
-					button = "Return",
-					action = "spawn kitty",
-				},
-				{
-					map = "map-pointer",
-					button = "right",
-					action = "move-view",
-				},
-				{
-					map = "map-pointer",
-					button = "left",
-					action = "resize-view",
-				},
-				{
-					map = "map-pointer",
-					button = "middle",
-					action = "toggle-float"
-				}
-			},
-			["Alt"] = {
-				{
-					map = "map",
-					button = "q",
-					action = "close",
-				},
-				{
-					map = "map",
-					button = "v",
-					action = "focus-view next",
-				},
-			},
-			["Alt+Shift"] = {
-				{
-					map = "map",
-					button = "v",
-					action = "focus-view previous",
-				},
-			},
-			["Control"] = {
-				{
-					map = "map",
-					button = "h",
-					opts = "-repeat",
-					action = "resize horizontal 10",
-				},
-				{
-					map = "map",
-					opts = "-repeat",
 					button = "l",
-					action = "resize horizontal -10",
+					action = "spawn swaylock",
 				},
-				{
-					map = "map",
-					opts = "-repeat",
-					button = "j",
-					action = "resize vertical 5",
-				},
-				{
-					map = "map",
-					opts = "-repeat",
-					button = "k",
-					action = "resize vertical -5"
-				}
-			},
-			["Control+Shift"] = {
 				{
 					map = "map",
 					opts = "-repeat",
@@ -141,7 +81,102 @@ binds = {
 					button = "k",
 					action = "move up 5",
 				},
-			}
+			},
+			["Super"] = {
+				{
+					map = "map",
+					button = "h",
+					opts = "-repeat",
+					action = "resize horizontal 10",
+				},
+				{
+					map = "map",
+					opts = "-repeat",
+					button = "l",
+					action = "resize horizontal -10",
+				},
+				{
+					map = "map",
+					opts = "-repeat",
+					button = "j",
+					action = "resize vertical 5",
+				},
+				{
+					map = "map",
+					opts = "-repeat",
+					button = "k",
+					action = "resize vertical -5"
+				},
+				{
+					map = "map",
+					button = "Return",
+					action = "spawn kitty",
+				},
+				{
+					map = "map-pointer",
+					button = "right",
+					action = "move-view",
+				},
+				{
+					map = "map-pointer",
+					button = "left",
+					action = "resize-view",
+				},
+				{
+					map = "map-pointer",
+					button = "middle",
+					action = "toggle-float"
+				},
+				{
+					map = "map",
+					button = "r",
+					action = "spawn 'riverctl spawn \"$(tofi-drun)\"'",
+				}
+			},
+			["Alt"] = {
+				{
+					map = "map",
+					button = "q",
+					action = "close",
+				},
+				{
+					map = "map",
+					button = "l",
+					action = "focus-view next",
+				},
+				{
+					map = "map",
+					button = "h",
+					action = "focus-view previous",
+				},
+			},
+			["Alt+Shift"] = {
+				{
+					map = "map",
+					button = "h",
+					action = "swap previous",
+				},
+				{
+					map = "map",
+					button = "l",
+					action = "swap next"
+				}
+			},
+			["Control"] = {
+				{
+					map = "map",
+					button = "h",
+					opts = "-repeat",
+					action = "send-layout-cmd rivertile 'main-ratio -0.0075'"
+				},
+				{
+					map = "map",
+					button = "l",
+					opts = "-repeat",
+					action = "send-layout-cmd rivertile 'main-ratio +0.0075'"
+				},
+
+			},
 		},
 	},
 }
@@ -185,7 +220,7 @@ generic_settings = {
 	["hide-cursor when-typing"] = "enabled",
 	["set"] = {
 		["cursor-warp"] = "on-focus-change",
-		["repeat"] = "40 125",
+		["repeat"] = "40 150",
 	},
 }
 
